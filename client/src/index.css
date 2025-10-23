@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for hotel UI */
+@layer base {
+  body {
+    font-family: 'Geist Variable', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .hotel-card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-4;
+  }
+  
+  .hotel-button {
+    @apply px-4 py-2 rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+  
+  .hotel-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+  
+  .hotel-select {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+  
+  .ai-indicator {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .ai-indicator-high {
+    @apply bg-green-100 text-green-800;
+  }
+  
+  .ai-indicator-medium {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+  
+  .ai-indicator-low {
+    @apply bg-red-100 text-red-800;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .shadow-hotel {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .border-gradient {
+    border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) 1;
+  }
+}
+
