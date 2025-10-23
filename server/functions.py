@@ -189,11 +189,7 @@ async def handle_checkin_form(args: Dict[str, Any]) -> Dict[str, Any]:
             # UI state fields (maps to checkinUI in store)
             # Frontend will use these to populate the UI immediately
             "searchQuery": guest_name,  # Pre-populate search box
-
-            # Metadata for validation/display
-            "confidence": args.get("confidence", 0.8),
         },
-        "confidence": args.get("confidence", 0.8),
         "status": "completed",
         "timestamp": datetime.now().isoformat()
     }
@@ -252,11 +248,7 @@ async def handle_availability_search(args: Dict[str, Any]) -> Dict[str, Any]:
                     "min_price": "",
                     "max_price": "",
                 },
-
-                # Metadata
-                "confidence": args.get("confidence", 0.8),
             },
-            "confidence": args.get("confidence", 0.8),
             "status": "completed",
             "timestamp": datetime.now().isoformat()
         }
@@ -269,7 +261,6 @@ async def handle_availability_search(args: Dict[str, Any]) -> Dict[str, Any]:
                 "check_in_date": check_in_date,
                 "check_out_date": check_out_date,
             },
-            "confidence": 0.0,
             "status": "error",
             "timestamp": datetime.now().isoformat()
         }
@@ -333,11 +324,7 @@ async def handle_reservation_modification(args: Dict[str, Any]) -> Dict[str, Any
                     "room_type": new_room_type,
                 }.items() if v
             },
-
-            # Metadata
-            "confidence": args.get("confidence", 0.8),
         },
-        "confidence": args.get("confidence", 0.8),
         "status": "completed",
         "timestamp": datetime.now().isoformat()
     }
@@ -383,11 +370,7 @@ async def handle_special_request(args: Dict[str, Any]) -> Dict[str, Any]:
             "request_type": request_type,
             "room_number": room_number,
             "details": details,
-
-            # Metadata
-            "confidence": args.get("confidence", 0.8),
         },
-        "confidence": args.get("confidence", 0.8),
         "status": "completed",
         "timestamp": datetime.now().isoformat()
     }
