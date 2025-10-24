@@ -2,6 +2,8 @@
 
 A split-screen hotel reception system powered by voice AI that listens to conversations and automatically populates forms, making front desk operations faster and more efficient.
 
+<img src="./docs/demo.gif"/>
+
 ## Features
 
 - **Split-Screen Interface**: Left panel for manual control, right panel for AI-populated forms
