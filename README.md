@@ -14,7 +14,7 @@ A split-screen hotel reception system powered by voice AI that listens to conver
 ## Architecture
 
 - **Frontend**: React + TypeScript + Tailwind CSS
-- **Backend**: Pipecat pipeline with local Whisper STT + gpt-oss LLM (no TTS)
+- **Backend**: Pipecat pipeline with local Whisper STT + Llama3.2 3B LLM (no TTS)
 - **Database**: Supabase for guests, reservations, rooms, requests
 - **Communication**: WebSocket via Pipecat's RTVI protocol
 
@@ -77,7 +77,7 @@ A split-screen hotel reception system powered by voice AI that listens to conver
 1. **Connect**: Click "Connect" to start voice AI
 2. **Speak**: Have conversations with guests naturally
 3. **Watch**: AI automatically populates forms on the right screen
-4. **Pull**: Use Ctrl+P or "Pull from AI" button to transfer data
+4. **Pull**: Use Cmd+Shift+P or "Pull from AI" button to transfer data
 5. **Complete**: Finish workflows with pre-filled information
 
 ### Testing Commands
@@ -86,10 +86,10 @@ You can test the AI data population without voice input using the browser consol
 
 ```javascript
 // Test check-in workflow
-testPopulateData('checkin')
+testPopulateData("checkin");
 
 // Test availability search workflow
-testPopulateData('availability')
+testPopulateData("availability");
 ```
 
 ## User Stories
