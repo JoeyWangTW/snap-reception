@@ -61,11 +61,6 @@ FUNCTION_DEFINITIONS = [
                     "type": "string",
                     "description": "Preferred room type",
                     "enum": ["standard", "deluxe", "suite", "any"]
-                },
-                "preferences": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "Additional preferences like ocean_view, balcony, etc."
                 }
             },
             "required": []
@@ -208,7 +203,6 @@ async def handle_availability_search(args: Dict[str, Any]) -> Dict[str, Any]:
         check_in_date: Check-in date - can be relative or YYYY-MM-DD format
         check_out_date: Check-out date - can be relative or YYYY-MM-DD format
         room_type: Preferred room type (standard/deluxe/suite/any)
-        preferences: Additional preferences array
 
     Returns:
         Enriched data including:
@@ -219,7 +213,6 @@ async def handle_availability_search(args: Dict[str, Any]) -> Dict[str, Any]:
     check_in_raw = args.get("check_in_date", "")
     check_out_raw = args.get("check_out_date", "")
     room_type = args.get("room_type", "any")
-    preferences = args.get("preferences", [])
 
     try:
         # Parse relative dates with smart defaulting
@@ -241,7 +234,6 @@ async def handle_availability_search(args: Dict[str, Any]) -> Dict[str, Any]:
                 "check_in_date": check_in_date,
                 "check_out_date": check_out_date,
                 "room_type": room_type,
-                "preferences": preferences,
 
                 # UI state fields (maps to availabilityUI.filters in store)
                 # Pre-populate the filter form
@@ -249,7 +241,6 @@ async def handle_availability_search(args: Dict[str, Any]) -> Dict[str, Any]:
                     "check_in_date": check_in_date,
                     "check_out_date": check_out_date,
                     "room_type": room_type,
-                    "status": "available",  # Default to available rooms
                     "min_price": "",
                     "max_price": "",
                 },

@@ -21,9 +21,8 @@ export const useMockHotel = () => {
       "Here's my passport",
     ],
     availability: [
-      "Do you have any rooms available from March 15th to March 18th?",
+      "Do you have any rooms available from October 24th to October 27th?",
       "I'm looking for a deluxe room",
-      "I'd prefer one with a balcony and jacuzzi if possible",
     ],
     modification: [
       "I need to extend my reservation",

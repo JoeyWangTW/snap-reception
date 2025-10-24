@@ -30,18 +30,9 @@ export function DataBrowser() {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
       {mockRooms.map((room) => (
         <div key={room.id} className="p-3 bg-white border border-gray-200 rounded-md hover:shadow-sm transition-shadow">
-          <div className="flex justify-between items-start mb-2">
-            <div>
-              <h4 className="font-semibold text-gray-800">Room {room.room_number}</h4>
-              <p className="text-sm text-gray-600 capitalize">{room.room_type}</p>
-            </div>
-            <span className={`px-2 py-1 text-xs rounded ${
-              room.status === 'available' ? 'bg-green-100 text-green-800' :
-              room.status === 'occupied' ? 'bg-red-100 text-red-800' :
-              'bg-yellow-100 text-yellow-800'
-            }`}>
-              {room.status}
-            </span>
+          <div className="mb-2">
+            <h4 className="font-semibold text-gray-800">Room {room.room_number}</h4>
+            <p className="text-sm text-gray-600 capitalize">{room.room_type}</p>
           </div>
           <p className="text-sm font-medium text-blue-600">${room.price_per_night}/night</p>
           <p className="text-xs text-gray-500 mt-1">

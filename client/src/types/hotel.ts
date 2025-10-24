@@ -15,7 +15,6 @@ export interface Room {
   id: string;
   room_number: string;
   room_type: 'standard' | 'deluxe' | 'suite';
-  status: 'available' | 'occupied' | 'maintenance';
   amenities: string[];
   price_per_night: number;
   created_at: string;
@@ -71,7 +70,6 @@ export interface AvailabilitySearchData {
   check_in_date: string;
   check_out_date: string;
   room_type: string;
-  preferences: string[];
   available_rooms: Room[];
   total_available: number;
 }
@@ -82,7 +80,6 @@ export interface AvailabilityUIState {
     check_in_date: string;
     check_out_date: string;
     room_type: string;
-    status: 'all' | 'available' | 'occupied' | 'maintenance';
     min_price: string;
     max_price: string;
   };

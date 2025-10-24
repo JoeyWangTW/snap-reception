@@ -49,7 +49,6 @@ export const mockRooms: Room[] = [
     id: 'room-1',
     room_number: '101',
     room_type: 'standard',
-    status: 'available',
     amenities: ['wifi', 'tv', 'minibar'],
     price_per_night: 120,
     created_at: '2024-01-01T00:00:00Z',
@@ -59,7 +58,6 @@ export const mockRooms: Room[] = [
     id: 'room-2',
     room_number: '102',
     room_type: 'standard',
-    status: 'occupied',
     amenities: ['wifi', 'tv', 'minibar'],
     price_per_night: 120,
     created_at: '2024-01-01T00:00:00Z',
@@ -69,7 +67,6 @@ export const mockRooms: Room[] = [
     id: 'room-3',
     room_number: '201',
     room_type: 'deluxe',
-    status: 'available',
     amenities: ['wifi', 'tv', 'minibar', 'balcony', 'jacuzzi'],
     price_per_night: 200,
     created_at: '2024-01-01T00:00:00Z',
@@ -79,7 +76,6 @@ export const mockRooms: Room[] = [
     id: 'room-4',
     room_number: '202',
     room_type: 'deluxe',
-    status: 'occupied',
     amenities: ['wifi', 'tv', 'minibar', 'balcony', 'jacuzzi'],
     price_per_night: 200,
     created_at: '2024-01-01T00:00:00Z',
@@ -89,7 +85,6 @@ export const mockRooms: Room[] = [
     id: 'room-5',
     room_number: '301',
     room_type: 'suite',
-    status: 'available',
     amenities: ['wifi', 'tv', 'minibar', 'balcony', 'jacuzzi', 'kitchen', 'living_room'],
     price_per_night: 350,
     created_at: '2024-01-01T00:00:00Z',
@@ -99,7 +94,6 @@ export const mockRooms: Room[] = [
     id: 'room-6',
     room_number: '302',
     room_type: 'suite',
-    status: 'maintenance',
     amenities: ['wifi', 'tv', 'minibar', 'balcony', 'jacuzzi', 'kitchen', 'living_room'],
     price_per_night: 350,
     created_at: '2024-01-01T00:00:00Z',
@@ -109,7 +103,6 @@ export const mockRooms: Room[] = [
     id: 'room-7',
     room_number: '103',
     room_type: 'standard',
-    status: 'available',
     amenities: ['wifi', 'tv'],
     price_per_night: 100,
     created_at: '2024-01-01T00:00:00Z',
@@ -119,7 +112,6 @@ export const mockRooms: Room[] = [
     id: 'room-8',
     room_number: '203',
     room_type: 'deluxe',
-    status: 'available',
     amenities: ['wifi', 'tv', 'minibar', 'balcony'],
     price_per_night: 180,
     created_at: '2024-01-01T00:00:00Z',
@@ -132,13 +124,13 @@ export const mockReservations: Reservation[] = [
     id: 'res-1',
     guest_id: 'guest-1',
     room_id: 'room-2',
-    check_in_date: '2024-03-15',
-    check_out_date: '2024-03-18',
-    status: 'confirmed',
+    check_in_date: '2025-10-22',
+    check_out_date: '2025-10-25',
+    status: 'checked_in',
     special_requests: 'Late checkout requested',
     total_amount: 360,
-    created_at: '2024-03-01T10:00:00Z',
-    updated_at: '2024-03-01T10:00:00Z',
+    created_at: '2025-10-15T10:00:00Z',
+    updated_at: '2025-10-22T10:00:00Z',
     guest: mockGuests[0],
     room: mockRooms[1],
   },
@@ -146,13 +138,13 @@ export const mockReservations: Reservation[] = [
     id: 'res-2',
     guest_id: 'guest-2',
     room_id: 'room-4',
-    check_in_date: '2024-03-20',
-    check_out_date: '2024-03-25',
+    check_in_date: '2025-10-20',
+    check_out_date: '2025-10-27',
     status: 'checked_in',
     special_requests: 'Extra pillows',
-    total_amount: 1000,
-    created_at: '2024-03-05T14:30:00Z',
-    updated_at: '2024-03-20T15:00:00Z',
+    total_amount: 1400,
+    created_at: '2025-10-10T14:30:00Z',
+    updated_at: '2025-10-20T15:00:00Z',
     guest: mockGuests[1],
     room: mockRooms[3],
   },
@@ -160,12 +152,12 @@ export const mockReservations: Reservation[] = [
     id: 'res-3',
     guest_id: 'guest-3',
     room_id: 'room-1',
-    check_in_date: '2024-04-01',
-    check_out_date: '2024-04-05',
+    check_in_date: '2025-10-25',
+    check_out_date: '2025-10-28',
     status: 'confirmed',
-    total_amount: 480,
-    created_at: '2024-03-10T09:15:00Z',
-    updated_at: '2024-03-10T09:15:00Z',
+    total_amount: 360,
+    created_at: '2025-10-18T09:15:00Z',
+    updated_at: '2025-10-18T09:15:00Z',
     guest: mockGuests[2],
     room: mockRooms[0],
   },
@@ -173,13 +165,13 @@ export const mockReservations: Reservation[] = [
     id: 'res-4',
     guest_id: 'guest-4',
     room_id: 'room-3',
-    check_in_date: '2024-03-25',
-    check_out_date: '2024-03-30',
+    check_in_date: '2025-10-23',
+    check_out_date: '2025-10-26',
     status: 'confirmed',
     special_requests: 'Quiet room preferred',
-    total_amount: 1000,
-    created_at: '2024-03-12T16:45:00Z',
-    updated_at: '2024-03-12T16:45:00Z',
+    total_amount: 600,
+    created_at: '2025-10-16T16:45:00Z',
+    updated_at: '2025-10-16T16:45:00Z',
     guest: mockGuests[3],
     room: mockRooms[2],
   },
@@ -236,11 +228,37 @@ export const mockDatabase = {
       return mockRooms.find(r => r.room_number === roomNumber);
     },
     findAvailable: (checkIn: string, checkOut: string, roomType?: string): Room[] => {
-      // Simple logic: return rooms that are currently available
+      // Check which rooms have overlapping reservations for the given date range
+      if (!checkIn || !checkOut) {
+        // If no dates provided, return all rooms filtered by type
+        return mockRooms.filter(r => {
+          const typeMatch = !roomType || roomType === 'any' || r.room_type === roomType;
+          return typeMatch;
+        });
+      }
+
+      const requestedCheckIn = new Date(checkIn);
+      const requestedCheckOut = new Date(checkOut);
+
+      // Get all room IDs that have overlapping reservations
+      const occupiedRoomIds = new Set(
+        mockReservations
+          .filter(reservation => {
+            const resCheckIn = new Date(reservation.check_in_date);
+            const resCheckOut = new Date(reservation.check_out_date);
+
+            // Check if reservation overlaps with requested dates
+            // Overlap occurs when: resCheckIn < requestedCheckOut AND resCheckOut > requestedCheckIn
+            return resCheckIn < requestedCheckOut && resCheckOut > requestedCheckIn;
+          })
+          .map(reservation => reservation.room_id)
+      );
+
+      // Return rooms that are NOT occupied during the requested period
       return mockRooms.filter(r => {
-        const statusMatch = r.status === 'available';
+        const isAvailable = !occupiedRoomIds.has(r.id);
         const typeMatch = !roomType || roomType === 'any' || r.room_type === roomType;
-        return statusMatch && typeMatch;
+        return isAvailable && typeMatch;
       });
     },
   },
@@ -299,11 +317,10 @@ export const generateMockAIUpdate = (workflow: string) => {
       return {
         workflow: 'availability',
         data: {
-          check_in_date: '2024-03-15',
-          check_out_date: '2024-03-18',
+          check_in_date: '2025-10-24',
+          check_out_date: '2025-10-27',
           room_type: 'deluxe',
-          preferences: ['balcony', 'jacuzzi'],
-          available_rooms: mockDatabase.rooms.findAvailable('2024-03-15', '2024-03-18', 'deluxe'),
+          available_rooms: mockDatabase.rooms.findAvailable('2025-10-24', '2025-10-27', 'deluxe'),
           total_available: 2,
         },
         status: 'ready',

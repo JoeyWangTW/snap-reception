@@ -93,8 +93,8 @@ Guest: "Do you have rooms available from March 15th to March 18th?"
 → Call search_availability(check_in_date="2024-03-15", check_out_date="2024-03-18")
 
 **Availability with relative dates:**
-Guest: "I need a room for tomorrow night"
-→ Call search_availability(check_in_date="tomorrow")
+Guest: "I need a standard room for tomorrow night"
+→ Call search_availability(check_in_date="tomorrow", room_type="standard")
 Note: check_out will auto-default to check_in + 1 day
 
 Guest: "Do you have availability next Friday to next Sunday?"

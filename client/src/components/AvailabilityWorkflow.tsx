@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHotelStore } from '../store/hotelStore';
 import { mockDatabase } from '../data/mockData';
 
@@ -12,27 +12,29 @@ export const AvailabilityWorkflow: React.FC<AvailabilityWorkflowProps> = ({ isAI
   const setAvailabilityFilters = useHotelStore((state) => state.setAvailabilityFilters);
   const setFilteredRooms = useHotelStore((state) => state.setFilteredRooms);
 
+  // Auto-search when filters change (especially important for AI updates)
+  useEffect(() => {
+    if (filters.check_in_date && filters.check_out_date) {
+      const results = mockDatabase.rooms.findAvailable(
+        filters.check_in_date,
+        filters.check_out_date,
+        filters.room_type
+      );
+
+      // Apply additional filters
+      const filtered = results.filter((room) => {
+        const minPriceMatch = !filters.min_price || room.price_per_night >= parseFloat(filters.min_price);
+        const maxPriceMatch = !filters.max_price || room.price_per_night <= parseFloat(filters.max_price);
+        return minPriceMatch && maxPriceMatch;
+      });
+
+      setFilteredRooms(screen, filtered);
+    }
+  }, [filters.check_in_date, filters.check_out_date, filters.room_type, filters.min_price, filters.max_price, screen, setFilteredRooms]);
+
   const handleFilterChange = (field: string, value: string) => {
     const newFilters = { [field]: value };
     setAvailabilityFilters(screen, newFilters);
-
-    // Perform search with updated filters
-    const updatedFilters = { ...filters, ...newFilters };
-    const results = mockDatabase.rooms.findAvailable(
-      updatedFilters.check_in_date,
-      updatedFilters.check_out_date,
-      updatedFilters.room_type
-    );
-
-    // Apply additional filters
-    const filtered = results.filter((room) => {
-      const statusMatch = updatedFilters.status === 'all' || room.status === updatedFilters.status;
-      const minPriceMatch = !updatedFilters.min_price || room.price_per_night >= parseFloat(updatedFilters.min_price);
-      const maxPriceMatch = !updatedFilters.max_price || room.price_per_night <= parseFloat(updatedFilters.max_price);
-      return statusMatch && minPriceMatch && maxPriceMatch;
-    });
-
-    setFilteredRooms(screen, filtered);
   };
 
   return (
@@ -70,19 +72,6 @@ export const AvailabilityWorkflow: React.FC<AvailabilityWorkflowProps> = ({ isAI
             <option value="standard">Standard</option>
             <option value="deluxe">Deluxe</option>
             <option value="suite">Suite</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Status</label>
-          <select
-            value={filters.status}
-            onChange={(e) => handleFilterChange('status', e.target.value)}
-            className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="all">All</option>
-            <option value="available">Available</option>
-            <option value="occupied">Occupied</option>
-            <option value="maintenance">Maintenance</option>
           </select>
         </div>
         <div>
@@ -126,13 +115,6 @@ export const AvailabilityWorkflow: React.FC<AvailabilityWorkflowProps> = ({ isAI
                   </div>
                   <div className="text-right">
                     <p className="font-semibold text-blue-600">${room.price_per_night}/night</p>
-                    <p className={`text-xs px-2 py-1 rounded mt-1 ${
-                      room.status === 'available' ? 'bg-green-100 text-green-800' :
-                      room.status === 'occupied' ? 'bg-red-100 text-red-800' :
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {room.status}
-                    </p>
                   </div>
                 </div>
               </div>
