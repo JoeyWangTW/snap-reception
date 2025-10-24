@@ -10,8 +10,6 @@ import { generateMockAIUpdate } from './data/mockData';
 
 function HotelApp() {
   const {
-    manual,
-    ai,
     pullFromAI,
     isAIDataReady,
     setManualWorkflow,
@@ -20,7 +18,7 @@ function HotelApp() {
 
   const { connectionState, connect, disconnect } = usePipecatHotel();
 
-  // Test button to populate AI data immediately
+  // Test function to populate AI data - accessible via console
   const populateTestData = (workflow: string) => {
     const mockUpdate = generateMockAIUpdate(workflow);
     if (mockUpdate) {
@@ -28,13 +26,20 @@ function HotelApp() {
     }
   };
 
-  // Global keyboard shortcut for pull action
+  // Expose test function to console
+  useEffect(() => {
+    (window as any).testPopulateData = populateTestData;
+    return () => {
+      delete (window as any).testPopulateData;
+    };
+  }, [updateAI]);
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const isMac = navigator.platform.includes('Mac');
       const isCtrlOrCmd = isMac ? event.metaKey : event.ctrlKey;
       
-      if (isCtrlOrCmd && event.key === 'p') {
+      if (isCtrlOrCmd && event.key === 'p' && event.shiftKey) {
         event.preventDefault();
         if (isAIDataReady) {
           pullFromAI();
@@ -66,22 +71,6 @@ function HotelApp() {
           </div>
           
           <div className="flex items-center space-x-4">
-            {/* Test buttons for quick data population */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => populateTestData('checkin')}
-                className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700"
-              >
-                Test Check-in
-              </button>
-              <button
-                onClick={() => populateTestData('availability')}
-                className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700"
-              >
-                Test Availability
-              </button>
-            </div>
-
             <PullButton
               onPull={pullFromAI}
               isAIDataReady={isAIDataReady}

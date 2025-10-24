@@ -30,7 +30,7 @@ export const PullButton: React.FC<PullButtonProps> = ({ onPull, isAIDataReady })
       
       <div className="text-xs text-gray-500">
         <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">
-          {navigator.platform.includes('Mac') ? '⌘' : 'Ctrl'}+P
+          {navigator.platform.includes('Mac') ? '⌘' : 'Ctrl'}+Shift+P
         </kbd>
       </div>
       

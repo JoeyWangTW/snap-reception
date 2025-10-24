@@ -31,11 +31,15 @@ export function AIScreen({ onWorkflowChange }: AIScreenProps) {
   return (
     <div className="h-full flex flex-col bg-blue-50">
       <div className="border-b border-blue-200 bg-blue-100 p-4">
-        <h2 className="text-xl font-bold text-blue-900">AI Assistant Screen</h2>
-        <p className="text-sm text-blue-700">Auto-populated from voice conversation</p>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold text-blue-900">AI Assistant Screen</h2>
+          <div className="text-sm text-gray-500">
+            Last updated: {lastUpdated ? new Date(lastUpdated).toLocaleTimeString() : 'Never'}
+          </div>
+        </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 border-b border-blue-200">
         <WorkflowSelector
           currentWorkflow={currentWorkflow}
           onWorkflowChange={onWorkflowChange}
@@ -43,15 +47,9 @@ export function AIScreen({ onWorkflowChange }: AIScreenProps) {
         />
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 pb-4">
+      <div className="flex-1 overflow-y-auto p-4">
         {renderWorkflow()}
       </div>
-
-      {lastUpdated && (
-        <div className="border-t border-blue-200 bg-blue-50 p-2 text-xs text-blue-600 text-center">
-          Last updated: {new Date(lastUpdated).toLocaleTimeString()}
-        </div>
-      )}
     </div>
   );
 }

@@ -77,8 +77,20 @@ A split-screen hotel reception system powered by voice AI that listens to conver
 1. **Connect**: Click "Connect" to start voice AI
 2. **Speak**: Have conversations with guests naturally
 3. **Watch**: AI automatically populates forms on the right screen
-4. **Pull**: Use Cmd/Ctrl+P or "Pull from AI" button to transfer data
+4. **Pull**: Use Ctrl+P or "Pull from AI" button to transfer data
 5. **Complete**: Finish workflows with pre-filled information
+
+### Testing Commands
+
+You can test the AI data population without voice input using the browser console:
+
+```javascript
+// Test check-in workflow
+testPopulateData('checkin')
+
+// Test availability search workflow
+testPopulateData('availability')
+```
 
 ## User Stories
 

@@ -35,9 +35,6 @@ export const ManualScreen: React.FC<ManualScreenProps> = ({ onWorkflowChange }) 
       <div className="border-b border-gray-200 p-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-800">Manual Control</h2>
-          <div className="text-sm text-gray-500">
-            Last updated: {lastUpdated ? new Date(lastUpdated).toLocaleTimeString() : 'Never'}
-          </div>
         </div>
       </div>
 
