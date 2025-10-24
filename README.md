@@ -26,35 +26,24 @@ A split-screen hotel reception system powered by voice AI that listens to conver
 
 - Python 3.12+
 - Node.js 18+
-- Supabase account
-- gpt-oss model running locally
+- Ollama & llama3.2 3B model
 
 ### Setup
 
 1. **Clone and setup environment**:
 
    ```bash
+   git clone https://github.com/JoeyWangTW/snap-reception.git
    cd snap-reception
-   cp server/.env.example server/.env
-   # Edit server/.env with your Supabase credentials
    ```
 
-2. **Setup Supabase**:
+2. **Prepare Ollama**
 
    ```bash
-   # Create Supabase project and run migrations
-   supabase db push
+   ollama run llama3.2
    ```
 
-3. **Start LLM server** (gpt-oss):
-
-   ```bash
-   # Download and run gpt-oss with llama-server
-   MODEL=ggml-org/gpt-oss-20b-GGUF
-   llama-server -hf $MODEL --verbose-prompt --chat-template-file gpt-oss-template.jinja --jinja --cache-reuse 128 -fa
-   ```
-
-4. **Start backend**:
+3. **Start backend**:
 
    ```bash
    cd server
@@ -64,7 +53,7 @@ A split-screen hotel reception system powered by voice AI that listens to conver
    python bot.py
    ```
 
-5. **Start frontend**:
+4. **Start frontend**:
 
    ```bash
    cd client
@@ -72,7 +61,7 @@ A split-screen hotel reception system powered by voice AI that listens to conver
    npm run dev
    ```
 
-6. **Open browser**: http://localhost:3000
+5. **Open browser**: http://localhost:3000
 
 ## Usage
 
