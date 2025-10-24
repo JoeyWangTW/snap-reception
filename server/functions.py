@@ -11,6 +11,8 @@ from datetime import date, datetime
 from typing import Dict, Any, Optional, List
 from loguru import logger
 
+from date_utils import parse_relative_date, resolve_date_pair
+
 
 # Function definitions for LLM
 FUNCTION_DEFINITIONS = [
@@ -49,11 +51,11 @@ FUNCTION_DEFINITIONS = [
             "properties": {
                 "check_in_date": {
                     "type": "string",
-                    "description": "Check-in date in YYYY-MM-DD format"
+                    "description": "Check-in date - can be relative like 'tomorrow', '+1' (days from today), 'next Friday', or YYYY-MM-DD format. Extract guest's exact wording."
                 },
                 "check_out_date": {
                     "type": "string",
-                    "description": "Check-out date in YYYY-MM-DD format"
+                    "description": "Check-out date - can be relative like 'next Sunday', '+3', or YYYY-MM-DD format. Extract guest's exact wording. If not specified, will default to check-in + 1 day."
                 },
                 "room_type": {
                     "type": "string",
@@ -66,7 +68,7 @@ FUNCTION_DEFINITIONS = [
                     "description": "Additional preferences like ocean_view, balcony, etc."
                 }
             },
-            "required": ["check_in_date", "check_out_date"]
+            "required": []
         }
     },
     {
@@ -81,11 +83,11 @@ FUNCTION_DEFINITIONS = [
                 },
                 "new_check_in_date": {
                     "type": "string",
-                    "description": "New check-in date in YYYY-MM-DD format"
+                    "description": "New check-in date - can be relative like 'tomorrow', '+2' (days from today), 'next Monday', or YYYY-MM-DD format. Extract guest's exact wording."
                 },
                 "new_check_out_date": {
                     "type": "string",
-                    "description": "New check-out date in YYYY-MM-DD format"
+                    "description": "New check-out date - can be relative like '+2' (extend by 2 days), 'next Friday', or YYYY-MM-DD format. Extract guest's exact wording."
                 },
                 "new_room_type": {
                     "type": "string",
@@ -203,24 +205,27 @@ async def handle_availability_search(args: Dict[str, Any]) -> Dict[str, Any]:
     against its mock room data.
 
     Args:
-        check_in_date: Check-in date in YYYY-MM-DD format
-        check_out_date: Check-out date in YYYY-MM-DD format
+        check_in_date: Check-in date - can be relative or YYYY-MM-DD format
+        check_out_date: Check-out date - can be relative or YYYY-MM-DD format
         room_type: Preferred room type (standard/deluxe/suite/any)
         preferences: Additional preferences array
 
     Returns:
         Enriched data including:
-        - Search parameters
+        - Search parameters (with resolved dates)
         - Filter state for UI
         - Validation metadata
     """
-    check_in_date = args.get("check_in_date", "")
-    check_out_date = args.get("check_out_date", "")
+    check_in_raw = args.get("check_in_date", "")
+    check_out_raw = args.get("check_out_date", "")
     room_type = args.get("room_type", "any")
     preferences = args.get("preferences", [])
 
     try:
-        # Validate dates if provided
+        # Parse relative dates with smart defaulting
+        check_in_date, check_out_date = resolve_date_pair(check_in_raw, check_out_raw)
+
+        # Validate resolved dates
         if check_in_date:
             check_in = datetime.strptime(check_in_date, "%Y-%m-%d").date()
         if check_out_date:
@@ -258,8 +263,8 @@ async def handle_availability_search(args: Dict[str, Any]) -> Dict[str, Any]:
             "workflow": "availability",
             "data": {
                 "error": str(e),
-                "check_in_date": check_in_date,
-                "check_out_date": check_out_date,
+                "check_in_date": check_in_raw,
+                "check_out_date": check_out_raw,
             },
             "status": "error",
             "timestamp": datetime.now().isoformat()
@@ -275,22 +280,26 @@ async def handle_reservation_modification(args: Dict[str, Any]) -> Dict[str, Any
 
     Args:
         reservation_id: Reservation ID or guest name for lookup
-        new_check_in_date: New check-in date (optional)
-        new_check_out_date: New check-out date (optional)
+        new_check_in_date: New check-in date - can be relative or YYYY-MM-DD (optional)
+        new_check_out_date: New check-out date - can be relative or YYYY-MM-DD (optional)
         new_room_type: New room type preference (optional)
         additional_services: Array of additional services (optional)
 
     Returns:
         Enriched data including:
-        - Modification parameters
+        - Modification parameters (with resolved dates)
         - UI state for search and edit mode
         - Modification tracking flags
     """
     reservation_id = args.get("reservation_id", "")
-    new_check_in_date = args.get("new_check_in_date", "")
-    new_check_out_date = args.get("new_check_out_date", "")
+    new_check_in_raw = args.get("new_check_in_date", "")
+    new_check_out_raw = args.get("new_check_out_date", "")
     new_room_type = args.get("new_room_type", "")
     additional_services = args.get("additional_services", [])
+
+    # Parse relative dates (no smart pairing for modifications)
+    new_check_in_date = parse_relative_date(new_check_in_raw) if new_check_in_raw else ""
+    new_check_out_date = parse_relative_date(new_check_out_raw) if new_check_out_raw else ""
 
     # NOTE: Frontend has mock reservation data
     # We return search parameters, frontend will lookup and populate

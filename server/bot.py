@@ -83,17 +83,42 @@ You are an AI assistant for a hotel front desk. Your job is to listen to convers
 - Respond ONLY with function calls - no conversational text
 
 ## EXAMPLES
+
+**Check-in:**
 Guest: "Hi, I have a reservation under John Smith"
 → Call update_checkin_form(guest_name="John Smith")
 
+**Availability with absolute dates:**
 Guest: "Do you have rooms available from March 15th to March 18th?"
 → Call search_availability(check_in_date="2024-03-15", check_out_date="2024-03-18")
 
-Guest: "I'd like to extend my stay by two more nights"
-→ Call modify_reservation(reservation_id="current", new_check_out_date="+2 days")
+**Availability with relative dates:**
+Guest: "I need a room for tomorrow night"
+→ Call search_availability(check_in_date="tomorrow")
+Note: check_out will auto-default to check_in + 1 day
 
+Guest: "Do you have availability next Friday to next Sunday?"
+→ Call search_availability(check_in_date="next Friday", check_out_date="next Sunday")
+
+Guest: "Looking for a room starting in 3 days"
+→ Call search_availability(check_in_date="in 3 days")
+
+**Modification with relative dates:**
+Guest: "I'd like to extend my stay by two more nights"
+→ Call modify_reservation(reservation_id="current", new_check_out_date="+2")
+
+Guest: "Can I change my check-in to next Monday?"
+→ Call modify_reservation(reservation_id="current", new_check_in_date="next Monday")
+
+**Special requests:**
 Guest: "Can I get a late checkout at 2 PM?"
 → Call create_special_request(request_type="late_checkout", details="2 PM checkout requested")
+
+## IMPORTANT FOR DATES
+- Extract the guest's EXACT wording for dates (e.g., "tomorrow", "next Friday", "+2")
+- Do NOT calculate or convert dates - the backend will handle that
+- If only one date is mentioned, that's fine - the other will be auto-filled
+- Support both absolute (2024-03-15) and relative (tomorrow, +1, next Friday) formats
 
 Remember: Extract data accurately, call functions promptly."""
 
@@ -114,56 +139,65 @@ async def run_bot(transport):
     # Register function callbacks
     async def update_checkin_form_callback(params: FunctionCallParams):
         logger.info(f"update_checkin_form called with args: {params.arguments}")
-        # Push RTVI message to notify frontend of function call
+
+        # Process the arguments
+        result = await handle_checkin_form(params.arguments)
+
+        # Push RTVI message with PROCESSED data to frontend
         frame = RTVIServerMessageFrame(
             data={
                 "type": "llm-function-call",
                 "payload": {
                     "function_name": "update_checkin_form",
-                    "args": params.arguments
+                    "args": result.get("data", {})  # Send processed data instead of raw args
                 }
             }
         )
         await rtvi.push_frame(frame)
         logger.info(f"Function call frame sent: update_checkin_form")
-        
-        #result = await handle_checkin_form(params.arguments)
-        #await params.result_callback(result)
+
+        await params.result_callback(result)
 
     async def search_availability_callback(params: FunctionCallParams):
         logger.info(f"search_availability called with args: {params.arguments}")
-        # Push RTVI message to notify frontend of function call
+
+        # Process the arguments (parse dates, apply defaults)
+        result = await handle_availability_search(params.arguments)
+
+        # Push RTVI message with PROCESSED data to frontend
         frame = RTVIServerMessageFrame(
             data={
                 "type": "llm-function-call",
                 "payload": {
                     "function_name": "search_availability",
-                    "args": params.arguments
+                    "args": result.get("data", {})  # Send processed data instead of raw args
                 }
             }
         )
         await rtvi.push_frame(frame)
-        logger.info(f"Function call frame sent: search_availability")
-        
-        result = await handle_availability_search(params.arguments)
+        logger.info(f"Function call frame sent: search_availability with processed dates")
+
         await params.result_callback(result)
 
     async def modify_reservation_callback(params: FunctionCallParams):
         logger.info(f"modify_reservation called with args: {params.arguments}")
-        # Push RTVI message to notify frontend of function call
+
+        # Process the arguments (parse relative dates)
+        result = await handle_reservation_modification(params.arguments)
+
+        # Push RTVI message with PROCESSED data to frontend
         frame = RTVIServerMessageFrame(
             data={
                 "type": "llm-function-call",
                 "payload": {
                     "function_name": "modify_reservation",
-                    "args": params.arguments
+                    "args": result.get("data", {})  # Send processed data instead of raw args
                 }
             }
         )
         await rtvi.push_frame(frame)
-        logger.info(f"Function call frame sent: modify_reservation")
-        
-        result = await handle_reservation_modification(params.arguments)
+        logger.info(f"Function call frame sent: modify_reservation with processed dates")
+
         await params.result_callback(result)
 
     async def create_special_request_callback(params: FunctionCallParams):
