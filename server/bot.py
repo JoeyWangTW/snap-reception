@@ -22,7 +22,6 @@ from pipecat.frames.frames import (
     StartInterruptionFrame,
     LLMTextFrame,
 )
-from pipecat.processors.frameworks.rtvi import RTVIServerMessageFrame
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
@@ -144,17 +143,7 @@ async def run_bot(transport):
         result = await handle_checkin_form(params.arguments)
 
         # Push RTVI message with PROCESSED data to frontend
-        frame = RTVIServerMessageFrame(
-            data={
-                "type": "llm-function-call",
-                "payload": {
-                    "function_name": "update_checkin_form",
-                    "args": result.get("data", {})  # Send processed data instead of raw args
-                }
-            }
-        )
-        await rtvi.push_frame(frame)
-        logger.info(f"Function call frame sent: update_checkin_form")
+        await rtvi.handle_function_call(params)
 
         await params.result_callback(result)
 
@@ -164,18 +153,9 @@ async def run_bot(transport):
         # Process the arguments (parse dates, apply defaults)
         result = await handle_availability_search(params.arguments)
 
+        params.arguments = result.get("data", {})
         # Push RTVI message with PROCESSED data to frontend
-        frame = RTVIServerMessageFrame(
-            data={
-                "type": "llm-function-call",
-                "payload": {
-                    "function_name": "search_availability",
-                    "args": result.get("data", {})  # Send processed data instead of raw args
-                }
-            }
-        )
-        await rtvi.push_frame(frame)
-        logger.info(f"Function call frame sent: search_availability with processed dates")
+        await rtvi.handle_function_call(params)
 
         await params.result_callback(result)
 
@@ -186,34 +166,14 @@ async def run_bot(transport):
         result = await handle_reservation_modification(params.arguments)
 
         # Push RTVI message with PROCESSED data to frontend
-        frame = RTVIServerMessageFrame(
-            data={
-                "type": "llm-function-call",
-                "payload": {
-                    "function_name": "modify_reservation",
-                    "args": result.get("data", {})  # Send processed data instead of raw args
-                }
-            }
-        )
-        await rtvi.push_frame(frame)
-        logger.info(f"Function call frame sent: modify_reservation with processed dates")
+        await rtvi.handle_function_call(params)
 
         await params.result_callback(result)
 
     async def create_special_request_callback(params: FunctionCallParams):
         logger.info(f"create_special_request called with args: {params.arguments}")
         # Push RTVI message to notify frontend of function call
-        frame = RTVIServerMessageFrame(
-            data={
-                "type": "llm-function-call",
-                "payload": {
-                    "function_name": "create_special_request",
-                    "args": params.arguments
-                }
-            }
-        )
-        await rtvi.push_frame(frame)
-        logger.info(f"Function call frame sent: create_special_request")
+        await rtvi.handle_function_call(params)
         
         result = await handle_special_request(params.arguments)
         await params.result_callback(result)

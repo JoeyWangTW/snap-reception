@@ -29,52 +29,50 @@ export const usePipecatHotel = () => {
       useCallback(
         (data: any) => {
           console.log(`🔍 RTVI Event [${eventType}]:`, data);
-          if (data && typeof data === 'object' && 'type' in data && data.type === 'llm-function-call') {
+          if (eventType === RTVIEvent.LLMFunctionCall) {
             console.log('🎯 Found llm-function-call in event:', eventType, data);
 
-            // Extract function call data from payload
-            const functionCall = data.payload;
-            console.log('📦 Function call payload:', functionCall);
+            console.log('📦 Function call payload:', data);
           
             let result: Record<string, unknown> = { success: false, message: 'Unknown function' };
           
             try {
-              switch (functionCall.function_name) {
+              switch (data.function_name) {
                 case 'update_checkin_form': {
-                  console.log('🏨 Updating check-in form:', functionCall.args);
-                  updateAI('checkin', functionCall.args);
+                  console.log('🏨 Updating check-in form:', data.args);
+                  updateAI('checkin', data.args);
                   result = { success: true, message: 'Check-in form updated' };
                   console.log('✅ Check-in form updated');
                   break;
                 }
                 
                 case 'search_availability': {
-                  console.log('🔍 Searching availability:', functionCall.args);
-                  updateAI('availability', functionCall.args);
+                  console.log('🔍 Searching availability:', data.args);
+                  updateAI('availability', data.args);
                   result = { success: true, message: 'Availability search updated' };
                   console.log('✅ Availability search updated');
                   break;
                 }
               
                 case 'modify_reservation': {
-                  console.log('✏️ Modifying reservation:', functionCall.args);
-                  updateAI('modification', functionCall.args);
+                  console.log('✏️ Modifying reservation:', data.args);
+                  updateAI('modification', data.args);
                   result = { success: true, message: 'Reservation modification updated' };
                   console.log('✅ Reservation modification updated');
                   break;
                 }
               
                 case 'create_special_request': {
-                  console.log('⭐ Creating special request:', functionCall.args);
-                  updateAI('special_request', functionCall.args);
+                  console.log('⭐ Creating special request:', data.args);
+                  updateAI('special_request', data.args);
                   result = { success: true, message: 'Special request created' };
                   console.log('✅ Special request created');
                   break;
                 }
               
                 default:
-                  result = { success: false, message: `Unknown function: ${functionCall.function_name}` };
-                  console.log('❌ Unknown function call:', functionCall.function_name);
+                  result = { success: false, message: `Unknown function: ${data.function_name}` };
+                  console.log('❌ Unknown function call:', data.function_name);
                   break;
               }
             }
